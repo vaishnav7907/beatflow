@@ -15,26 +15,15 @@ import Recents from "../pages/recents/Recents";
 
 import { Link, Links, NavLink, Outlet, Route, Routes } from "react-router-dom";
 
-const MainDashboard = ({ h, c, p, f, r }) => {
-  const navigatetruefunction = () => {
-    h(true);
-    c(true);
-    p(true);
-    f(true);
-    r(true);
-  };
+const MainDashboard = () => {
 
-const [actiive,setActiive] = useState(false)
-
-  const clickk=() =>{
-setActiive(true)
-  }
 
   const sidebar = [
     {
       icons: <GoHome size={23} className="text-slate-400 hover:text-white" />,
       name: "Home",
-      path: "/dashboard/homepage",
+      path: "homepage",
+      
     },
 
     {
@@ -42,7 +31,7 @@ setActiive(true)
         <BiCategory size={23} className="text-slate-400 hover:text-white" />
       ),
       name: "Categories",
-      path: "/dashboard/categories",
+      path: "categories",
     },
 
     {
@@ -50,7 +39,7 @@ setActiive(true)
         <TbPlaylist size={23} className="text-slate-400 hover:text-white" />
       ),
       name: "Playlist",
-      path: "/dashboard/playlist",
+      path: "playlist",
     },
 
     {
@@ -61,7 +50,7 @@ setActiive(true)
         />
       ),
       name: "Favorites",
-      path: "/dashboard/favorites",
+      path: "favorites",
     },
 
     {
@@ -72,7 +61,7 @@ setActiive(true)
         />
       ),
       name: "Recents",
-      path: "/dashboard/recents",
+      path: "recents",
     },
   ];
 
@@ -99,16 +88,13 @@ setActiive(true)
                   to={data.path}
                   key={index}
                   className="px-4 py-3 flex gap-1.5 hover:bg-slate-800 w-55 rounded-md   cursor-pointer   "
-                  onClick={navigatetruefunction}
+                  
                 >
                   <div>{data.icons}</div>
                   <p className="text-slate-400 hover:text-white">{data.name}</p>
                 </Link>
 
-                // <li  className='px-4 py-3 flex gap-1.5 hover:bg-slate-800 w-55 rounded-md   cursor-pointer   '  >
-                //   <div  >{data.icons}</div>
-                //   <p className='text-slate-400 hover:text-white'>{data.name}</p>
-                // </li>
+                
               );
             })}
           </ul>
@@ -117,43 +103,11 @@ setActiive(true)
         {/* main content */}
 
         <div className="h-screen  flex-2  p-8 overflow-x-scroll ">
-         
-
-<Outlet/>
 
 
-{/* <Routes>
-  <Route />
-</Routes> */}
-          {/* <Link  to={"/dashboard"}>
-            <Homepage />
-          </Link> */}
+          <Outlet />
 
-          {/* <Link to={"/dashboard/categories"} >
-            
-         </Link>
-
-         <Link to={"/dashboard/playlist"}>
-         
-         </Link>
-
-         <Link to={"/dashboard/favorites"}>
-         
-         </Link>
-
-         <Link to={"/dashboard/recents"}>
-         
-         </Link> */}
-
-          {/* <Homepage />
-
-            
-
-          <Categories />
-
-          <Playlist/>
-          <Favorites/>
-          <Recents /> */}
+          
         </div>
       </div>
 

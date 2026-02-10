@@ -16,7 +16,6 @@ import Recents from "./components/pages/recents/Recents";
 
 function App() {
   const [islogin, setIslogin] = useState(false);
-  const [navigatee, setNavigatee] = useState(false);
 
   return (
     <div className="h-screen w-screen">
@@ -26,7 +25,6 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route
-            exact
             path="/"
             element={
               !islogin ? (
@@ -38,14 +36,23 @@ function App() {
           />
           <Route
             path="/dashboard"
-            element={islogin ? <MainDashboard /> : <Navigate to={"/"} />}
-          >
-            <Route  index path="homepage" element={<Homepage />} />
+            element={islogin ? <MainDashboard /> : <Navigate to={"/"} />}>
+
+
+            <Route index element={<Homepage />} />
+            <Route  path="homepage" element={<Homepage />} />
             <Route path="categories" element={<Categories />} />
             <Route path="playlist" element={<Playlist />} />
             <Route path="favorites" element={<Favorites />} />
             <Route path="recents" element={<Recents />} />
+
+            
           </Route>
+
+          {/* <Route  element={<MainDashboard/>}>
+
+         
+          </Route> */}
         </Routes>
       </BrowserRouter>
     </div>
