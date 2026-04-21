@@ -153,7 +153,7 @@ const Playlist = () => {
                 className="opacity-0 group-hover:opacity-100 transform translate-y-2 group-hover:translate-y-0 transition duration-300"
                 onClick={(e) => {
                   e.stopPropagation();
-                  navigation("/urplaylist");
+                  navigation("/urplaylist",{ state: { playlistId: item._id } });
                 }}
               >
                 <div className="bg-white text-black p-2 rounded-full hover:scale-110 transition">

@@ -5,10 +5,13 @@ import { useNavigate } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
 import { BsArrowRight } from "react-icons/bs";
 import { CgPlayListAdd } from "react-icons/cg";
-
+import { IoIosLogOut } from "react-icons/io";
 const Homepage = () => {
   const navigatee = useNavigate();
-
+  const logout = () => {
+    localStorage.removeItem("token");
+    window.location.href = "/";
+  };
   const [artists, setArtists] = useState([]);
   const [getasong, setGetasong] = useState([]);
 
@@ -42,12 +45,42 @@ const Homepage = () => {
     fetchasong();
   }, []);
 
+  // addsongs to fav
+
+  const addalltofav = async (songId) => {
+    try {
+      const token = localStorage.getItem("token");
+
+      await axios.post(
+        "http://localhost:5999/authentication/addtofav",
+        { songId },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      alert("✅ Song added to favourites");
+    } catch (error) {
+      console.log("Favourite error", error.response?.data || error);
+    }
+  };
+
   return (
     <div className="w-full flex flex-col gap-9 min-h-screen">
       {/* HEADER */}
       <div>
-        <h1 className="text-5xl text-white mb-4">Good Afternoon</h1>
-        <p className="text-gray-500 text-xl">Explore thousands of tracks</p>
+        <div className="flex justify-between">
+          <div>
+            <h1 className="text-5xl text-white mb-4">Good Afternoon</h1>
+            <p className="text-gray-500 text-xl">Explore thousands of tracks</p>
+          </div>
+          <div className="text-red-500 hover:scale-110 transition duration-300 p-6">
+            <IoIosLogOut size={30} onClick={() => logout()} />
+          </div>
+        </div>
+
         <div className="w-full h-0.5 bg-gray-900 mt-4"></div>
       </div>
 
@@ -56,7 +89,7 @@ const Homepage = () => {
         <div className="slider">
           {getasong.slice(2, 5).map((song, index) => (
             <div className={`card c${index + 1}`} key={song._id}>
-              <img src={`http://localhost:5999/${song.songimage}`} alt="" />
+              <img src={`http://localhost:5999/${song.songimage}`} alt="nnn" />
             </div>
           ))}
         </div>
@@ -86,7 +119,7 @@ const Homepage = () => {
               <img
                 className="w-24 h-24 rounded-full object-cover"
                 src={`http://localhost:5999/${artist.artistimge}`}
-                alt=""
+                alt="nnn"
               />
               <p className="text-white text-sm mt-2">{artist.artistname}</p>
             </div>
@@ -107,12 +140,15 @@ const Homepage = () => {
               <img
                 src={`http://localhost:5999/${songdisplay.songimage}`}
                 className="w-40 h-32 object-cover rounded-xl hover:scale-3d hover:scale-105 transition duration-150 "
-                alt=""
+                alt="nnn"
               />
 
               <div className="flex flex-col justify-between">
                 <div className="flex justify-end">
-                  <FaHeart className="text-red-400" />
+                  <FaHeart
+                    className="text-red-400 cursor-pointer"
+                    onClick={() => addalltofav(songdisplay._id)}
+                  />
                 </div>
 
                 <div>

@@ -1,25 +1,20 @@
 import React, { useState } from "react";
-import { TbBrandNeteaseMusic } from "react-icons/tb";
-import { TiTick } from "react-icons/ti";
-import welcomeimg from "../../assets/welcomepageimg/wlcm4.png";
-import Signup from "./Signup";
-import Signin from "./Signin";
 
-const WelcomeInterface = ({ mera}) => {
+import Signup from "./Signup";
+import { PiUserSwitch } from "react-icons/pi";
+import { useNavigate } from "react-router-dom";
+
+const WelcomeInterface = () => {     //{setIsLogin}
   // const [signn,Setsignn] = useState()
   // const a = () => {
   //   mera
   // }
 
-  const [clickme , setClickme]= useState(false)
+const navigation = useNavigate()
 
-const getit=()=>{
-  setClickme(true)
-}
+  
 
-  const a = () => {
-    mera(true);
-  };
+ 
 
 
   return (
@@ -31,12 +26,8 @@ const getit=()=>{
               <h1 className="text-white text-6xl font-bold "><span className="text-red-600">F</span><span className="animate-pulse">eel</span> <span className="animate-pulse">The</span> <span className="animate-pulse">Beat</span></h1>
           </div>
 
-          <div className="flex">
-            <h1 className="text-red-600 text-4xl font-bold animate-bounce ">.</h1>
-            <h1 className="text-white text-3xl font-bold animate-pulse">|</h1>
-            <h1 className="text-red-600 text-4xl font-bold animate-bounce">.</h1>
-            <h1 className="text-white text-3xl font-bold animate-pulse">|</h1>
-            <h1 className="text-red-600 text-4xl font-bold animate-bounce">.</h1>
+          <div className="flex text-white hover:text-red-500 hover:scale-110 transition duration-300">
+            <PiUserSwitch size={30} onClick={()=>navigation("/authentication")}/>
          </div>
 
 
@@ -45,10 +36,10 @@ const getit=()=>{
              
 
 
-          <div className=''>
-            <Signup tosignup={a}/>
+          {/* <div className='hidden'>
+            <Signup  tosignup={handleLogin}/>
             
-          </div>
+          </div> */}
            
         
         </div>

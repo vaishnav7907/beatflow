@@ -1,32 +1,59 @@
-import React from 'react'
+import React, { useState } from "react";
+import axios from "axios";
 
-const Signin = () => {
-    return (
-        <div>
-            <div className='h-70 w-120 bg-white/2 backdrop-blur-[.2em] border border-white/2 rounded-xl shadow-lg flex flex-col  items-center justify-center '>
+const Signin = ({ onLoginSuccess }) => {
+  const [Email, setEmail] = useState("");
+  const [Password, setPassword] = useState("");
 
-                <form action="" className='flex flex-col gap-7 justify-center items-center'>
-                    <div>
-                        <h3 className='font-medium text-2xl  text-fuchsia-50'>
-                            Sign In
-                        </h3>
-                    </div>
+  const submit = async (e) => {
+    e.preventDefault();
 
-                    <div className='flex flex-col gap-2'>
-                        <label htmlFor="" className='text-fuchsia-50' >Enter Email Address</label>
-                        <input type="email" className='w-70  h-7  bg-white/2  border-white/0  rounded-[.5em] p-3 text-[#E9854F] placeholder-gray-500 ' placeholder='email . . .' />
-                    </div>
+    try {
+      const res = await axios.post(
+        "http://localhost:5999/authentication/login",
+        {
+          Email,
+          Password,
+        }
+      );
 
-                    <div>
+      localStorage.setItem("token", res.data.token);
 
-                        <button className='w-30 h-9 rounded-2xl  bg-[#E9854F] hover:bg-amber-600 text-gray-950' >Let's Go</button>
+      onLoginSuccess();
+    } catch (error) {
+      console.log(error);
+      alert("Login failed ");
+    }
+  };
 
-                    </div>
-                </form>
+  return (
+    <div className="h-70 w-120 bg-white/2 backdrop-blur-[.2em] border rounded-xl shadow-lg flex flex-col items-center justify-center">
 
-            </div>
-        </div>
-    )
-}
+      <form onSubmit={submit} className="flex flex-col gap-7 items-center">
 
-export default Signin
+        <h3 className="text-fuchsia-50 text-2xl font-medium">Sign In</h3>
+
+        <input
+          type="email"
+          placeholder="email..."
+          value={Email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+
+        <input
+          type="password"
+          placeholder="password..."
+          value={Password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+
+        <button type="submit">
+          Let's Go
+        </button>
+
+      </form>
+    </div>
+  );
+};
+
+export default Signin;

@@ -53,7 +53,7 @@ const navigate = useNavigate()
       </div>
 
       {/* music player */}
-      <div className="   ">
+      <div className="   " >
         <Playsongs />
       </div>
     </div>

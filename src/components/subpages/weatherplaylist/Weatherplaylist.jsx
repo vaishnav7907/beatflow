@@ -113,7 +113,7 @@ const Weatherplaylist = () => {
                         {/* img */}
                         <img
                           src={`http://localhost:5999/${song.songimage}`}
-                          alt=""
+                          alt="mmm"
                           className="w-full h-full object-cover rounded-2xl"
                         />
                       </div>

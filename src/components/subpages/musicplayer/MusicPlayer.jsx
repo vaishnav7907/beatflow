@@ -4,6 +4,8 @@ import { IoPlaySkipForwardOutline } from "react-icons/io5";
 import { FaRegCirclePlay } from "react-icons/fa6";
 import { FaRegCirclePause } from "react-icons/fa6";
 import img from "../../../assets/welcomepageimg/vv.png";
+import { FaArrowLeftLong } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 const MusicPlayer = () => {
   const musicref = useRef(null);
   const [isplay, setIsplay] = useState(false);
@@ -45,32 +47,35 @@ const MusicPlayer = () => {
 
     return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
   };
+
+const navigation = useNavigate()
+
   return (
     <div className="bg-black w-full h-screen p-6 ">
-      <div className="flex w-full h-full  items-center justify-between">
+      <div>
+        <FaArrowLeftLong
+          size={37}
+          onClick={() => navigation("/dashboard/homepage")}
+          className="cursor-pointer text-gray-400 transition"
+        />
+      </div>
+
+      <div className="flex w-full h-full  items-center justify-center flex-wrap md:items-center md:justify-between md:flex-nowrap xl:items-center xl:justify-between  xl:flex-nowrap">
         <div className="w-1/2 flex items-center justify-center">
           <div className=" w-96 h-96 bg-amber-600 rounded-3xl">
             <img
               src={img}
-              alt=""
+              alt="music"
               className="h-full w-full object-cover rounded-3xl"
             />
           </div>
         </div>
         <div className="w-full ">
           <div className="flex flex-col items-center ">
-
-
-
             <div>
-                <h5 className="text-white">
-                    songs
+              <h5 className="text-white">songs</h5>
 
-                </h5>
-
-                <p className="text-white">
-                    artist
-                </p>
+              <p className="text-white">artist</p>
             </div>
             {/* CONTROLS */}
             <div className="flex items-center gap-6 mb-2 pt-4">
