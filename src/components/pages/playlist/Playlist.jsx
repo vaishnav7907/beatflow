@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { GoPlus } from "react-icons/go";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import imges from "../../../assets/welcomepageimg/vv.png";
-import { useNavigate, useLocation, Outlet, useOutletContext } from "react-router-dom";
+import { useNavigate, useLocation, useOutletContext } from "react-router-dom";
 import axios from "axios";
 import { BiLogInCircle } from "react-icons/bi";
 
@@ -171,7 +171,7 @@ const Playlist = () => {
           </div>
         ))}
       </div>
-      <Outlet />
+     
     </div>
   );
 };

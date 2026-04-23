@@ -22,6 +22,9 @@ const Playlistname = () => {
     }
   };
 
+
+  
+
   return (
     <div className="w-full h-screen bg-linear-to-tr from-purple-900 via-black to-blue-900 flex flex-col">
       <div className="p-5 flex gap-3">
@@ -56,6 +59,7 @@ const Playlistname = () => {
           </button>
         </div>
       </div>
+      
     </div>
   );
 };

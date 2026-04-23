@@ -2,12 +2,14 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { MdOutlineFavoriteBorder } from "react-icons/md";
 import { MdFavorite } from "react-icons/md";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { FaHeart } from "react-icons/fa";
+import { CgPlayListAdd } from "react-icons/cg";
+import { useplayer } from "../../context/Playerprovider";
 const Favorites = () => {
   // const location = useLocation();
   // const songId = location.state?.songId;
-
+const navigate=useNavigate()
   const [getfavsongs, setGetfavsongs] = useState([]);
 
   const getaddfavsongs = async () => {
@@ -58,6 +60,30 @@ const Favorites = () => {
     return `${minutes} min ${sec < 10 ? "0" : ""}${sec}sec`;
   };
 
+  const { setCurrentSong, setSonglist, setCurrentindex } = useplayer();
+
+  const favSongsOnly = getfavsongs.map((item) => item.songId); //without this one song is play
+
+  //add to playlist
+
+  const addSongToPlaylist = async (playlistId) => {
+    if (!songId) {
+      // navigation("/urplaylist");
+      return;
+    }
+
+    try {
+      await axios.post("http://localhost:5999/authentication/addsongplaylist", {
+        playlistId,
+        songId,
+      });
+
+      alert("✅ Song added!");
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <div>
       <div className=" p-5">
@@ -89,8 +115,15 @@ const Favorites = () => {
         {/* favourites */}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 mt-7 justify-items-center">
-          {getfavsongs.map((favsongs) => (
-            <div className="relative rounded-2xl w-full max-w-xs min-h-[260px] p-3 flex flex-col items-center shadow-sm bg-gray-950 hover:scale-105 transition duration-300">
+          {getfavsongs.map((favsongs, index) => (
+            <div
+              className="relative rounded-2xl w-full max-w-xs min-h-[260px] p-3 flex flex-col items-center shadow-sm bg-gray-950 hover:scale-105 transition duration-300"
+              onClick={() => {
+                setSonglist(favSongsOnly);
+                setCurrentindex(index);
+                setCurrentSong(favSongsOnly[index]);
+              }}
+             key={favsongs._id} >
               {/* IMAGE */}
               <div className="h-32 sm:h-40 w-full rounded-xl overflow-hidden mb-4">
                 <img
@@ -109,11 +142,22 @@ const Favorites = () => {
                 </p>
               </div>
 
-            
-              <FaHeart
-                className="absolute bottom-3 right-3 text-red-400 text-lg cursor-pointer hover:scale-110 transition duration-300"
-                onClick={() => deletefav(favsongs.songId._id)}
-              />
+              <div className="absolute bottom-0 flex  justify-between w-full pl-3 pr-3 pb-2">
+                <CgPlayListAdd
+                  className="text-green-400 text-2xl cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation
+                    navigate("/dashboard/playlist",
+                      {
+                        state: { songId: favsongs.songId._id },
+                      });
+                  }}
+                />
+                <FaHeart
+                  className=" text-red-400 text-lg cursor-pointer hover:scale-110 transition duration-300"
+                  onClick={() => deletefav(favsongs.songId._id)}
+                />
+              </div>
             </div>
           ))}
         </div>

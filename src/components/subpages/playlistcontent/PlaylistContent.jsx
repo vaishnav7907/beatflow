@@ -3,9 +3,11 @@ import { GoPlus } from "react-icons/go";
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { BsThreeDotsVertical } from "react-icons/bs";
 import imges from "../../../assets/welcomepageimg/vv.png";
-import { useLocation, useNavigate, useOutletContext,  } from "react-router-dom";
+import { useLocation, useNavigate, useOutletContext } from "react-router-dom";
 import axios from "axios";
 import { useplayer } from "../../context/Playerprovider";
+import Playsongs from "../../dashboard/Playsongs";
+import { FaHeart } from "react-icons/fa";
 
 const PlaylistContent = () => {
   const navigation = useNavigate();
@@ -27,8 +29,21 @@ const PlaylistContent = () => {
   }, [playlistId]);
 
   const { setCurrentSong, setSonglist, setCurrentindex } = useplayer();
- 
 
+  const [playlistplay, setPlaylistplay] = useState(false);
+
+
+
+
+  const addtofav= async (songId) => {
+    try {
+      const token=localStorage.getItem("token")
+      await axios.post("http://localhost:5999/authentication/addtofav",{songId},{headers:{Authorization:`Bearer ${token}`}})
+      alert("✅ Added to favourites");
+    } catch (error) {
+      console.log("Fav error", error.response?.data || error);
+    }
+  }
   return (
     <div className="bg-[#0b0f19] min-h-screen p-6 text-white">
       {/* HEADER */}
@@ -51,12 +66,18 @@ const PlaylistContent = () => {
       </h1>
 
       {/* SONG CONTAINER */}
+
       <div className="bg-[#121826] rounded-2xl p-3 space-y-2 shadow-lg">
         {getallsongs.map((dothing, index) => (
           <div
             key={dothing._id}
             className="flex items-center justify-between px-4 py-3 rounded-xl hover:bg-white/10 transition duration-300 group"
-           
+            onClick={() => {
+              (setPlaylistplay(true),
+                setSonglist(getallsongs),
+                setCurrentindex(index),
+                setCurrentSong(getallsongs[index]));
+            }}
           >
             {/* LEFT */}
             <div className="flex items-center gap-4">
@@ -84,9 +105,14 @@ const PlaylistContent = () => {
             </div>
 
             {/* RIGHT */}
-            <div className="flex items-center gap-5">
+            <div className="flex items-center gap-10">
+              <div className=" ">
+                
+                <FaHeart className="hover:text-red-500 hover:scale-125" size={17} onClick={(e)=>{e.stopPropagation(), addtofav(dothing._id) }}/>
+              </div>
+
               {/* DURATION */}
-              <span className="text-xs text-gray-500 group-hover:text-gray-300 hidden sm:block">
+              <span className="text-xs text-gray-500 group-hover:text-gray-300 hidden sm:block" >
                 3:45
               </span>
 
@@ -116,6 +142,11 @@ const PlaylistContent = () => {
           </div>
         ))}
       </div>
+      {playlistplay && (
+        <div className="fixed bottom-0 left-0 w-full z-50">
+          <Playsongs />
+        </div>
+      )}
     </div>
   );
 };
