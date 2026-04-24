@@ -8,54 +8,7 @@ const Weatherplaylist = () => {
 
 
 
-  const categories = [
-    {
-      title: "Old Classics",
-      songs: [
-        {
-          title: "Golden Melody",
-          artist: "Artist A",
-          img: "https://picsum.photos/300?1",
-        },
-        {
-          title: "Vintage Love",
-          artist: "Artist B",
-          img: "https://picsum.photos/300?2",
-        },
-      ],
-    },
-    {
-      title: "Mid Era Hits",
-      songs: [
-        {
-          title: "Retro Beat",
-          artist: "Artist C",
-          img: "https://picsum.photos/300?3",
-        },
-        {
-          title: "Urban Vibe",
-          artist: "Artist D",
-          img: "https://picsum.photos/300?4",
-        },
-      ],
-    },
-
-    {
-      title: "New Trending",
-      songs: [
-        {
-          title: "Fresh Drop",
-          artist: "Artist E",
-          img: "https://picsum.photos/300?5",
-        },
-        {
-          title: "Hot Track",
-          artist: "Artist F",
-          img: "https://picsum.photos/300?6",
-        },
-      ],
-    },
-  ];
+ //weather api=  https://api.openweathermap.org/data/2.5/weather?q=kerala&appid=d9ad3915f576967fe4c4d67e89acd522
   const [getasong, setGetasong] = useState([]);
 
   const fetchasong = async () => {
