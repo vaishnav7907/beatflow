@@ -5,23 +5,50 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Weatherplaylist = () => {
+  //weather api=  https://api.openweathermap.org/data/2.5/weather?q=kerala&appid=d9ad3915f576967fe4c4d67e89acd522
+  //  Thunderstorm, Drizzle, Rain, Snow, Atmosphere (mist, fog, smoke), Clear, and Clouds
 
+  const [getweathersongs, setGetweathersongs] = useState([]);
 
-
- //weather api=  https://api.openweathermap.org/data/2.5/weather?q=kerala&appid=d9ad3915f576967fe4c4d67e89acd522
-  const [getasong, setGetasong] = useState([]);
-
-  const fetchasong = async () => {
-    const getasongapi = await axios.get(
-      "http://localhost:5999/authentication/getallsongs",
-    );
-    console.log(getasongapi.data);
-    setGetasong(getasongapi.data);
+  const fetchweathersong = async (weather) => {
+    try {
+      const getasongapi = await axios.get(
+        `http://localhost:5999/authentication/getallsongs?weather=${weather}`,
+      );
+      console.log(getasongapi.data);
+      setGetweathersongs(getasongapi.data);
+    } catch (error) {
+      console.log("fetch weathersong error",error);
+      
+    }
   };
 
-  useEffect(() => {
-    fetchasong();
-  }, []);
+ 
+
+  // weatherapi=  "https://api.openweathermap.org/data/2.5/weather?q=kerala&appid=d9ad3915f576967fe4c4d67e89acd522"
+
+  const [weathertype, setWeathertype] = useState("");
+
+  const weatherset = async () => {
+    try {
+      const weatherapi = await axios.get(
+        "https://api.openweathermap.org/data/2.5/weather?q=kerala&appid=d9ad3915f576967fe4c4d67e89acd522",
+      );
+      console.log(weatherapi.data);
+
+      const mainweather = weatherapi.data.weather[0].main;
+      setWeathertype(mainweather);
+      fetchweathersong(mainweather)
+
+    } catch (error) {
+      console.log("weather api error", error);
+    }
+  };
+
+  useEffect(()=>{
+    weatherset()
+  },[])
+
   return (
     <div>
       <div>
@@ -57,7 +84,7 @@ const Weatherplaylist = () => {
 
               <div>
                 <div className="w-full  bg-black p-7 overflow-auto rounded-3xl grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4  gap-7">
-                  {getasong.map((song) => (
+                  {getweathersongs.map((song) => (
                     <div
                       className="w-60  bg-blue-200 rounded-3xl p-4 hover:bg-[#121826] transition hover:scale-105"
                       key={song._id}
