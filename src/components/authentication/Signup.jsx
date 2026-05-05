@@ -27,7 +27,7 @@ const Signup = ({setIslogin }) => {
     try {
       if (!sign) {
         // SIGNUP
-        await axios.post("http://localhost:5999/authentication/signup", {
+        await axios.post(`${import.meta.env.VITE_API_URL}/Beatflow/signup`, {
           Fullname,
           Email,
           Password,
@@ -37,7 +37,7 @@ const Signup = ({setIslogin }) => {
       } else {
         // LOGIN
         const res = await axios.post(
-          "http://localhost:5999/authentication/login",
+          `${import.meta.env.VITE_API_URL}/Beatflow/login`,
           { Email, Password },
         );
 

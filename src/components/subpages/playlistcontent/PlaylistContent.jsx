@@ -19,7 +19,7 @@ const PlaylistContent = () => {
 
   const getallplaylistSongs = async () => {
     const getallsongsapi = await axios.get(
-      `http://localhost:5999/authentication/getplaylists/${playlistId}`,
+      `${import.meta.env.VITE_API_URL}/Beatflow/getplaylists/${playlistId}`,
     );
     setGetallsongs(getallsongsapi.data.songs);
   };
@@ -39,7 +39,7 @@ const PlaylistContent = () => {
   const addtofav= async (songId) => {
     try {
       const token=localStorage.getItem("token")
-      await axios.post("http://localhost:5999/authentication/addtofav",{songId},{headers:{Authorization:`Bearer ${token}`}})
+      await axios.post(`${import.meta.env.VITE_API_URL}/Beatflow/addtofav`,{songId},{headers:{Authorization:`Bearer ${token}`}})
       alert("✅ Added to favourites");
     } catch (error) {
       console.log("Fav error", error.response?.data || error);
@@ -88,7 +88,7 @@ const PlaylistContent = () => {
               {/* IMAGE */}
               <div className="w-12 h-12 rounded-lg overflow-hidden shadow">
                 <img
-                  src={`http://localhost:5999/${dothing.songimage}`}
+                  src={`${import.meta.env.VITE_API_URL}/${dothing.songimage}`}
                   alt="song"
                   className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
                 />

@@ -17,7 +17,7 @@ const Playlist = () => {
   //  create playlist
   const playlistcreatefn = async () => {
     const res = await axios.post(
-      "http://localhost:5999/authentication/createplaylist",
+      `${import.meta.env.VITE_API_URL}/Beatflow/createplaylist`,
       {
         playlistname: `playlist${createplaylist.length + 1}`,
       },
@@ -31,7 +31,7 @@ const Playlist = () => {
     const fetchallplaylist = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5999/authentication/getallplaylists",
+          `${import.meta.env.VITE_API_URL}/Beatflow/getallplaylists`,
         );
         setcreateplalist(res.data);
       } catch (error) {
@@ -45,7 +45,7 @@ const Playlist = () => {
   const deleteplaylistfn = async (id) => {
     try {
       await axios.delete(
-        `http://localhost:5999/authentication/deleteplaylist/${id}`,
+        `${import.meta.env.VITE_API_URL}/Beatflow/deleteplaylist/${id}`,
       );
       setcreateplalist((prev) => prev.filter((item) => item._id !== id));
     } catch (error) {
@@ -61,7 +61,7 @@ const Playlist = () => {
     }
 
     try {
-      await axios.post("http://localhost:5999/authentication/addsongplaylist", {
+      await axios.post(`${import.meta.env.VITE_API_URL}/Beatflow/addsongplaylist`, {
         playlistId,
         songId,
       });

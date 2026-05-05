@@ -18,7 +18,7 @@ const navigate=useNavigate()
       console.log(token);
 
       const favouriteapi = await axios.get(
-        "http://localhost:5999/authentication/getallfav",
+        `${import.meta.env.VITE_API_URL}/Beatflow/getallfav`,
         { headers: { Authorization: `Bearer ${token}` } },
       );
       setGetfavsongs(favouriteapi.data);
@@ -34,7 +34,7 @@ const navigate=useNavigate()
     try {
       const token = localStorage.getItem("token");
       await axios.delete(
-        `http://localhost:5999/authentication/removefavsongs/${songId}`,
+        `${import.meta.env.VITE_API_URL}/Beatflow/removefavsongs/${songId}`,
 
         {
           headers: {
@@ -73,7 +73,7 @@ const navigate=useNavigate()
     }
 
     try {
-      await axios.post("http://localhost:5999/authentication/addsongplaylist", {
+      await axios.post(`${import.meta.env.VITE_API_URL}/Beatflow/addsongplaylist`, {
         playlistId,
         songId,
       });
@@ -127,7 +127,7 @@ const navigate=useNavigate()
               {/* IMAGE */}
               <div className="h-32 sm:h-40 w-full rounded-xl overflow-hidden mb-4">
                 <img
-                  src={`http://localhost:5999/${favsongs.songId?.songimage}`}
+                  src={`${import.meta.env.VITE_API_URL}/${favsongs.songId?.songimage}`}
                   className="w-full h-full object-cover"
                 />
               </div>

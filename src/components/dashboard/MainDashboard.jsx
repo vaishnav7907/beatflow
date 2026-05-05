@@ -57,10 +57,8 @@ const navigate = useNavigate()
       </div>
 
       {/* music player */}
-      <div className="   " >
-        <Playsongs  />      
-        {/* currentSong={currentSong}  setCurrentSong={setCurrentSong} songlist={songlist}  currentindex={currentindex} setCurrentindex={setCurrentindex} */}
-      </div>
+      
+      
     </div>
   );
 };

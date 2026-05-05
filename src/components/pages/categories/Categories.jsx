@@ -5,11 +5,12 @@ import { useplayer } from "../../context/Playerprovider";
 import { CgPlayListAdd } from "react-icons/cg";
 import { FaHeart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import Playsongs from "../../dashboard/Playsongs";
 const Categories = () => {
   const [query, setQuery] = useState("");
   const [songs, setSongs] = useState([]);
   const [searched, setSearched] = useState(false);
-
+const [playmusic,setPlaymusic]=useState(false)
   const navigate = useNavigate();
 
   // 🔍 API CALL
@@ -23,7 +24,7 @@ const Categories = () => {
       }
 
       const res = await axios.get(
-        `http://localhost:5999/authentication/searchsongs?query=${q}`,
+        `${import.meta.env.VITE_API_URL}/Beatflow/searchsongs?query=${q}`,
       );
 
       setSongs(res.data);
@@ -51,7 +52,7 @@ const Categories = () => {
       const token = localStorage.getItem("token");
 
       await axios.post(
-        "http://localhost:5999/authentication/addtofav",
+        `${import.meta.env.VITE_API_URL}/Beatflow/addtofav`,
         { songId },
         {
           headers: {
@@ -75,10 +76,13 @@ const Categories = () => {
     }
 
     try {
-      await axios.post("http://localhost:5999/authentication/addsongplaylist", {
-        playlistId,
-        songId,
-      });
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/Beatflow/addsongplaylist`,
+        {
+          playlistId,
+          songId,
+        },
+      );
 
       alert("✅ Song added!");
     } catch (error) {
@@ -127,12 +131,13 @@ const Categories = () => {
                     setCurrentSong(songs[index]);
                     setSonglist(songs);
                     setCurrentindex(index);
+                    setPlaymusic(true);
                   }}
                 >
                   <div className="flex gap-5">
                     <div className="w-16 h-16">
                       <img
-                        src={`http://localhost:5999/${song.songimage}`}
+                        src={`${import.meta.env.VITE_API_URL}/${song.songimage}`}
                         alt=""
                         className="rounded-lg h-full w-full object-cover"
                       />
@@ -168,9 +173,17 @@ const Categories = () => {
                 </div>
               ))
             ) : (
-              <p className="text-gray-500 mt-3">No songs found</p>
+              <div>
+                <p className="text-gray-500 mt-3">No songs found</p>
+              </div>
             ))}
         </div>
+
+            {playmusic && (
+              <div>
+                  <Playsongs />
+                </div>
+            )}
 
         {/* 🎼 Categories */}
         {/* <div className="flex gap-3">

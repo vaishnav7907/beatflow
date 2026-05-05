@@ -12,7 +12,7 @@ const Playlistname = () => {
   const updatePlaylists = async () => {
     try {
       const updateplaylisapi = await axios.patch(
-        `http://localhost:5999/authentication/updtplaylist/${playlistId}`,
+        `${import.meta.env.VITE_API_URL}/Beatflow/updtplaylist/${playlistId}`,
         { playlistname: updateplaylist },
       );
       navigation("/dashboard/playlist")

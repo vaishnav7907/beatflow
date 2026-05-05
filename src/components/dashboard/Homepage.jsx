@@ -7,11 +7,11 @@ import { BsArrowRight } from "react-icons/bs";
 import { CgPlayListAdd } from "react-icons/cg";
 import { IoIosLogOut } from "react-icons/io";
 import { useplayer } from "../context/Playerprovider";
+import Playsongs from "./Playsongs";
 const Homepage = () => {
+  // const {setCurrentSong , setCurrentindex, setSonglist}= useOutletContext()   //outlet loode prop pass cheyyumbol ingane ahn destructure cheycth edukkunnath
 
-// const {setCurrentSong , setCurrentindex, setSonglist}= useOutletContext()   //outlet loode prop pass cheyyumbol ingane ahn destructure cheycth edukkunnath
-
- const { setCurrentSong, setCurrentindex, setSonglist } = useplayer();
+  const { setCurrentSong, setCurrentindex, setSonglist } = useplayer();
 
   const navigatee = useNavigate();
   const logout = () => {
@@ -26,7 +26,7 @@ const Homepage = () => {
     const fetchartist = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5999/authentication/getallartists",
+          `${import.meta.env.VITE_API_URL}/Beatflow/getallartists`,
         );
         setArtists(res.data);
       } catch (err) {
@@ -41,7 +41,7 @@ const Homepage = () => {
     const fetchasong = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5999/authentication/getallsongs",
+          `${import.meta.env.VITE_API_URL}/Beatflow/getallsongs`,
         );
         setGetasong(res.data);
       } catch (err) {
@@ -58,7 +58,7 @@ const Homepage = () => {
       const token = localStorage.getItem("token");
 
       await axios.post(
-        "http://localhost:5999/authentication/addtofav",
+        `${import.meta.env.VITE_API_URL}/Beatflow/addtofav`,
         { songId },
         {
           headers: {
@@ -72,6 +72,8 @@ const Homepage = () => {
       console.log("Favourite error", error.response?.data || error);
     }
   };
+  const [playsongss, setplaysongss] = useState(false);
+
 
   return (
     <div className="w-full flex flex-col gap-9 min-h-screen">
@@ -91,7 +93,7 @@ const Homepage = () => {
       </div>
 
       {/* FEATURED */}
-      {getasong.length >= 3 && (
+      {/* {getasong.length >= 3 && (
         <div className="slider">
           {getasong.slice(2, 5).map((song, index) => (
             <div className={`card c${index + 1}`} key={song._id}>
@@ -99,7 +101,31 @@ const Homepage = () => {
             </div>
           ))}
         </div>
-      )}
+      )} */}
+
+      <div className="relative w-full h-80 overflow-hidden rounded-[40px] bg-black border border-zinc-800 p-10 flex flex-col justify-between  shadow-2xl">
+        <h3 className=" text-5xl font-extrabold text-white leading-tight">
+          {" "}
+          “Let the music <br />{" "}
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-500">
+            color your soul.”
+          </span>
+        </h3>
+
+        <p className="text-gray-200 text-lg  leading-9 font-light tracking-wide max-w-5xl drop-shadow-sm  pt-5">
+          Dive into a world where every beat brings
+          <span className="text-purple-400 font-medium"> peace</span>, every
+          lyric creates
+          <span className="text-pink-400 font-medium"> memories</span>, and
+          every song becomes a companion for your soul. Enjoy
+          <span className="text-white font-semibold">
+            {" "}
+            unlimited music for free
+          </span>
+          , discover beautiful vibes, and let your heart dance with the rhythm
+          of timeless melodies. 🎶
+        </p>
+      </div>
 
       {/* PLAYLIST CARD */}
       <div className="flex justify-between items-center bg-[#0b0f19] p-6 rounded-3xl">
@@ -117,14 +143,14 @@ const Homepage = () => {
 
       {/* ARTISTS */}
       <div>
-        <h1 className="text-2xl text-white">Your Favourite Artists</h1>
+        <h1 className="text-2xl text-white"> Artists</h1>
 
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6 pt-5">
           {artists.map((artist) => (
             <div key={artist._id} className="flex flex-col items-center">
               <img
                 className="w-24 h-24 rounded-full object-cover"
-                src={`http://localhost:5999/${artist.artistimge}`}
+                src={`${import.meta.env.VITE_API_URL}/${artist.artistimge}`}
                 alt="nnn"
               />
               <p className="text-white text-sm mt-2">{artist.artistname}</p>
@@ -138,18 +164,19 @@ const Homepage = () => {
         <h1 className="text-2xl text-white">Songs for you</h1>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-5 ">
-          {getasong.map((songdisplay,index) => (
+          {getasong.map((songdisplay, index) => (
             <div
               key={songdisplay._id}
               className="flex gap-3 bg-gray-950 p-3 rounded-2xl "
               onClick={() => {
-                setCurrentSong(songdisplay)
-                setSonglist(getasong)
-                setCurrentindex(index)
+                setCurrentSong(songdisplay);
+                setSonglist(getasong);
+                setCurrentindex(index);
+                setplaysongss (true);
               }}
             >
               <img
-                src={`http://localhost:5999/${songdisplay.songimage}`}
+                src={`${import.meta.env.VITE_API_URL}/${songdisplay.songimage}`}
                 className="w-40 h-32 object-cover rounded-xl hover:scale-3d hover:scale-105 transition duration-150 "
                 alt="nnn"
               />
@@ -182,6 +209,13 @@ const Homepage = () => {
                   />
                 </div>
               </div>
+
+              {playsongss && (
+                <div className="   ">
+                  <Playsongs />
+                  {/* currentSong={currentSong}  setCurrentSong={setCurrentSong} songlist={songlist}  currentindex={currentindex} setCurrentindex={setCurrentindex} */}
+                </div>
+              )}
             </div>
           ))}
         </div>

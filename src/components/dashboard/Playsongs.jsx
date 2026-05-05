@@ -5,11 +5,17 @@ import {
 } from "react-icons/io5";
 import { FaRegCirclePlay, FaRegCirclePause } from "react-icons/fa6";
 import { FiVolume2 } from "react-icons/fi";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useplayer } from "../context/Playerprovider";
 
 const Playsongs = () => {
-    const {currentSong,setCurrentSong,songlist,currentindex,setCurrentindex,} = useplayer();
+  const {
+    currentSong,
+    setCurrentSong,
+    songlist,
+    currentindex,
+    setCurrentindex,
+  } = useplayer();
 
   const navigation = useNavigate();
 
@@ -18,17 +24,8 @@ const Playsongs = () => {
   const [isplay, setIsplay] = useState(false);
   const [currentTime, setCurrettime] = useState(0);
   const [duration, setDuration] = useState(0);
-  // const [currentSong, setCurrentSong] = useState(null);
 
-  // ✅ set song from navigation
-  // useEffect(() => {
-  //   if (songplay) {
-  //     setCurrentSong(songplay);
-  //     setIsplay(false);
-  //   }
-  // }, [songplay]);
-
-  // ✅ autoplay when song changes
+  //  autoplay when song changes
   useEffect(() => {
     if (currentSong && musicref.current) {
       musicref.current.load();
@@ -36,7 +33,7 @@ const Playsongs = () => {
     }
   }, [currentSong]);
 
-  // ▶️ play
+  //  play
   const playmusic = async () => {
     try {
       await musicref.current?.play();
@@ -46,13 +43,13 @@ const Playsongs = () => {
     }
   };
 
-  // ⏸ pause
+  //  pause
   const pausemusic = () => {
     musicref.current?.pause();
     setIsplay(false);
   };
 
-  // 🔁 toggle
+  //  toggle
   const musicplaypause = () => {
     if (isplay) {
       pausemusic();
@@ -61,68 +58,76 @@ const Playsongs = () => {
     }
   };
 
-  // forward song button
+  //  forward
   const forwardsong = () => {
     if (!songlist.length) return;
+
     const nextindex = (currentindex + 1) % songlist.length;
+
     setCurrentindex(nextindex);
     setCurrentSong(songlist[nextindex]);
   };
 
-  //backward song button
+  // ⏮ backward
   const backwardsong = () => {
-    if(!songlist.length) return
-    const previndex= (currentindex - 1 + songlist.length) % songlist.length
-    setCurrentindex(previndex)
-    setCurrentSong(songlist[previndex])
-  }
+    if (!songlist.length) return;
 
-  // ⏱ update time
+    const previndex =
+      (currentindex - 1 + songlist.length) % songlist.length;
+
+    setCurrentindex(previndex);
+    setCurrentSong(songlist[previndex]);
+  };
+
+  // current time
   const settingCurrentTime = () => {
     if (musicref.current) {
       setCurrettime(musicref.current.currentTime);
     }
   };
 
-  // ⏱ duration
+  //  duration
   const settingDuration = () => {
     if (!isNaN(musicref.current.duration)) {
       setDuration(musicref.current.duration);
     }
   };
 
-  // 🧮 format time
+  //  format time
   const formatTime = (time) => {
     if (!time) return "0:00";
+
     const minutes = Math.floor(time / 60);
     const seconds = Math.floor(time % 60);
+
     return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
   };
 
   return (
-    <div className="fixed bottom-0 left-0 right-0 bg-black/90 backdrop-blur-xl border-t border-white/10 px-6 py-3">
-      <div className="flex items-center justify-between w-full">
+    <div className="fixed bottom-0 left-0 right-0 bg-black/90 backdrop-blur-xl border-t border-white/10 px-6 py-3 z-50">
+      <div className="grid grid-cols-3 items-center w-full gap-4">
         {/* LEFT */}
         <div
-          className="flex items-center gap-4 cursor-pointer"
+          className="flex items-center gap-4 min-w-0 cursor-pointer"
           // onClick={() =>
           //   navigation("/musicplayer", {
           //     state: { currentSong },
           //   })
           // }
         >
-          <div className="w-14 h-14 rounded-lg overflow-hidden">
+          <div className="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0">
             <img
-              src={`http://localhost:5999/${currentSong?.songimage}`}
+              src={`${import.meta.env.VITE_API_URL}/${currentSong?.songimage}`}
               className="w-full h-full object-cover"
               alt=""
             />
           </div>
 
-          <div className="min-w-0">
+          <div className="min-w-0 max-w-[220px]">
             <h1 className="text-white text-sm font-semibold truncate">
               {currentSong?.songname || "No Song"}
             </h1>
+
             <p className="text-gray-400 text-xs truncate">
               {currentSong?.artist || "Unknown"}
             </p>
@@ -131,9 +136,13 @@ const Playsongs = () => {
 
         {/* CENTER */}
         <div className="flex flex-col items-center w-full">
+          {/* CONTROLS */}
           <div className="flex items-center gap-6 mb-2">
-            <button className="text-gray-400 hover:text-white">
-              <IoPlaySkipBackOutline  onClick={backwardsong}/>
+            <button
+              className="text-gray-400 hover:text-white transition"
+              onClick={backwardsong}
+            >
+              <IoPlaySkipBackOutline size={24} />
             </button>
 
             <button
@@ -141,17 +150,24 @@ const Playsongs = () => {
                 e.stopPropagation();
                 musicplaypause();
               }}
-              className="bg-white text-black p-2 rounded-full"
+              className="bg-white text-black p-3 rounded-full hover:scale-105 transition"
             >
-              {isplay ? <FaRegCirclePause /> : <FaRegCirclePlay />}
+              {isplay ? (
+                <FaRegCirclePause size={22} />
+              ) : (
+                <FaRegCirclePlay size={22} />
+              )}
             </button>
 
-            <button className="text-gray-400 hover:text-white">
-              <IoPlaySkipForwardOutline onClick={forwardsong} />
+            <button
+              className="text-gray-400 hover:text-white transition"
+              onClick={forwardsong}
+            >
+              <IoPlaySkipForwardOutline size={24} />
             </button>
           </div>
 
-          {/* PROGRESS */}
+          {/* PROGRESS BAR */}
           <div className="flex items-center gap-3 w-full max-w-xl">
             <span className="text-xs text-gray-400 w-10 text-right">
               {formatTime(currentTime)}
@@ -164,11 +180,14 @@ const Playsongs = () => {
               value={currentTime}
               onChange={(e) => {
                 e.stopPropagation();
+
                 const value = Number(e.target.value);
+
                 musicref.current.currentTime = value;
+
                 setCurrettime(value);
               }}
-              className="w-full"
+              className="w-full accent-white"
             />
 
             <span className="text-xs text-gray-400 w-10">
@@ -178,19 +197,21 @@ const Playsongs = () => {
         </div>
 
         {/* RIGHT */}
-        <div className="flex items-center gap-3 w-1/4 justify-end">
-          <FiVolume2 className="text-white" />
+        <div className="flex items-center gap-3 justify-end">
+          <FiVolume2 className="text-white text-xl" />
 
           <input
             type="range"
             min="0"
             max="1"
             step="0.01"
+            defaultValue="1"
             onChange={(e) => {
               e.stopPropagation();
+
               musicref.current.volume = Number(e.target.value);
             }}
-            className="w-24"
+            className="w-24 accent-white"
           />
         </div>
       </div>
@@ -198,7 +219,10 @@ const Playsongs = () => {
       {/* AUDIO */}
       <audio
         ref={musicref}
-        src={`http://localhost:5999/${currentSong?.file.replace(/\\/g, "/")}`}
+        src={`${import.meta.env.VITE_API_URL}/${currentSong?.file.replace(
+          /\\/g,
+          "/"
+        )}`}
         onTimeUpdate={settingCurrentTime}
         onLoadedMetadata={settingDuration}
         onEnded={() => setIsplay(false)}
