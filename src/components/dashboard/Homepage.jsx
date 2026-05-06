@@ -216,15 +216,17 @@ const Homepage = () => {
                 </div>
               </div>
 
-              {playsongss && (
+              
+            </div>
+          ))}
+         
+        </div>
+         {playsongss && (
                 <div className="   ">
                   <Playsongs />
                   {/* currentSong={currentSong}  setCurrentSong={setCurrentSong} songlist={songlist}  currentindex={currentindex} setCurrentindex={setCurrentindex} */}
                 </div>
               )}
-            </div>
-          ))}
-        </div>
       </div>
     </div>
   );
