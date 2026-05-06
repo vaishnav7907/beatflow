@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-const Signin = ({ onLoginSuccess }) => {
+const Signin = () => {
   const [Email, setEmail] = useState("");
   const [Password, setPassword] = useState("");
 
@@ -17,9 +17,11 @@ const Signin = ({ onLoginSuccess }) => {
         }
       );
 
+      
+
       localStorage.setItem("token", res.data.token);
 
-      onLoginSuccess();
+      
     } catch (error) {
       console.log(error);
       alert("Login failed ");
