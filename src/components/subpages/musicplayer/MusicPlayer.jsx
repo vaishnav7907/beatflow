@@ -1,147 +1,163 @@
-// import React, { useEffect, useRef, useState } from "react";
-// import { IoPlaySkipBackOutline } from "react-icons/io5";
-// import { IoPlaySkipForwardOutline } from "react-icons/io5";
-// import { FaRegCirclePlay } from "react-icons/fa6";
-// import { FaRegCirclePause } from "react-icons/fa6";
-// import img from "../../../assets/welcomepageimg/vv.png";
-// import { FaArrowLeftLong } from "react-icons/fa6";
-// import { useNavigate } from "react-router-dom";
-// import { useLocation } from "react-router-dom";
-// const MusicPlayer = () => {
-//   const location = useLocation();
-//   const song = location.state?.currentSong;
-//   console.log(song);
-  
-//   const musicref = useRef(null);
-//   const [isplay, setIsplay] = useState(false);
+import React, { useEffect, useRef, useState } from "react";
+import { IoPlaySkipBackOutline } from "react-icons/io5";
+import { IoPlaySkipForwardOutline } from "react-icons/io5";
+import { FaRegCirclePlay } from "react-icons/fa6";
+import { FaRegCirclePause } from "react-icons/fa6";
+import { FaArrowLeftLong } from "react-icons/fa6";
+import { useNavigate, useLocation } from "react-router-dom";
 
-//   const [currentTime, setCurrettime] = useState(0);
-//   const [duration, setDuration] = useState(0);
-//   //playpause
-//   const playmusic = () => {
-//     musicref.current.play();
-//     setIsplay(true);
-//   };
+const MusicPlayer = () => {
+  const location = useLocation();
+  const song = location.state?.currentSong;
 
-//   const pausemusic = () => {
-//     musicref.current.pause();
-//     setIsplay(false);
-//   };
+  const musicref = useRef(null);
 
-//   const musicplaypause = () => {
-//     if (isplay) {
-//       pausemusic();
-//     } else {
-//       playmusic();
-//     }
-//   };
+  const [isplay, setIsplay] = useState(false);
+  const [currentTime, setCurrettime] = useState(0);
+  const [duration, setDuration] = useState(0);
 
-//   const settingCurrentTime = () => {
-//     setCurrettime(musicref.current.currentTime);
-//   };
+  // PLAY
+  const playmusic = () => {
+    musicref.current.play();
+    setIsplay(true);
+  };
 
-//   const settingDuration = () => {
-//     setDuration(musicref.current.duration);
-//   };
+  // PAUSE
+  const pausemusic = () => {
+    musicref.current.pause();
+    setIsplay(false);
+  };
 
-//   //format time (9:00)
+  // PLAY / PAUSE
+  const musicplaypause = () => {
+    if (isplay) {
+      pausemusic();
+    } else {
+      playmusic();
+    }
+  };
 
-//   const formatTime = (time) => {
-//     const minutes = Math.floor(time / 60);
-//     const seconds = Math.floor(time % 60);
+  // CURRENT TIME
+  const settingCurrentTime = () => {
+    setCurrettime(musicref.current.currentTime);
+  };
 
-//     return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
-//   };
+  // DURATION
+  const settingDuration = () => {
+    setDuration(musicref.current.duration);
+  };
 
-//   const navigation = useNavigate();
-//   useEffect(() => {
-//     if (song && musicref.current) {
-//       musicref.current.play();
-//       setIsplay(true);
-//     }
-//   }, [song]);
+  // FORMAT TIME
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
 
-//   return (
-//     <div className="bg-black w-full h-screen p-6 ">
-//       <div>
-//         <FaArrowLeftLong
-//           size={37}
-//           onClick={() => navigation("/dashboard/homepage")}
-//           className="cursor-pointer text-gray-400 transition"
-//         />
-//       </div>
+    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+  };
 
-//       <div className="flex w-full h-full  items-center justify-center flex-wrap md:items-center md:justify-between md:flex-nowrap xl:items-center xl:justify-between  xl:flex-nowrap">
-//         <div className="w-1/2 flex items-center justify-center">
-//           <div className=" w-96 h-96 bg-amber-600 rounded-3xl">
-//             <img
-//               src={`http://localhost:5999/${song.songimage}`}
-//               alt="music"
-//               className="h-full w-full object-cover rounded-3xl"
-//             />
-//           </div>
-//         </div>
-//         <div className="w-full ">
-//           <div className="flex flex-col items-center ">
-//             <div>
-//               <h5 className="text-white">{song?.songname || "No song"}</h5>
-//               <p className="text-white">{song?.artist || "Unknown"}</p>
-//             </div>
-//             {/* CONTROLS */}
-//             <div className="flex items-center gap-6 mb-2 pt-4">
-//               <button className="text-gray-400 hover:text-white transition">
-//                 <IoPlaySkipBackOutline className="w-5 h-5" />
-//               </button>
+  const navigation = useNavigate();
 
-//               <button
-//                 onClick={musicplaypause}
-//                 className="bg-white text-black p-2 rounded-full hover:scale-110 active:scale-95 transition"
-//               >
-//                 {isplay ? (
-//                   <FaRegCirclePause className="w-6 h-6" />
-//                 ) : (
-//                   <FaRegCirclePlay className="w-6 h-6" />
-//                 )}
-//               </button>
+  useEffect(() => {
+    if (song && musicref.current) {
+      musicref.current.play();
+      setIsplay(true);
+    }
+  }, [song]);
 
-//               <button className="text-gray-400 hover:text-white transition">
-//                 <IoPlaySkipForwardOutline className="w-5 h-5" />
-//               </button>
-//             </div>
+  return (
+    <div
+      className="min-h-screen p-4 sm:p-6 bg-cover bg-center bg-no-repeat relative overflow-hidden"
+      style={{
+        backgroundImage: `url(${import.meta.env.VITE_API_URL}/${song?.songimage?.replace(
+          /\\/g,
+          "/",
+        )})`,
+      }}
+    >
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-md"></div>
 
-//             {/* PROGRESS BAR */}
-//             <div className="flex items-center gap-3 w-full max-w-xl">
-//               <span className="text-xs text-gray-400 w-10 text-right">
-//                 {formatTime(currentTime)}
-//               </span>
+      <div className="relative z-10">
+        <div className="mb-6">
+          <FaArrowLeftLong
+            size={28}
+            onClick={() => navigation(-1)}
+            className="cursor-pointer text-gray-400 hover:text-white transition duration-300"
+          />
+        </div>
 
-//               <input
-//                 type="range"
-//                 min="0"
-//                 max={duration || 0}
-//                 value={currentTime}
-//                 onChange={(e) => {
-//                   musicref.current.currentTime = e.target.value;
-//                   setCurrettime(e.target.value);
-//                 }}
-//                 className="w-full h-1 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-green-500"
-//               />
+        <div className="flex flex-col items-center justify-center min-h-[85vh]">
+          <div className="w-full max-w-[95%] sm:max-w-md md:max-w-lg lg:max-w-xl rounded-3xl p-5 sm:p-8">
+            <div className="flex flex-col items-center justify-center w-full">
+              <div className="text-center mb-6 sm:mb-8">
+                <h1 className="text-white text-lg sm:text-3xl md:text-4xl font-bold tracking-wide capitalize break-words">
+                  {song?.songname || "No Song"}
+                </h1>
 
-//               <span className="text-xs text-gray-400 w-10">
-//                 {formatTime(duration)}
-//               </span>
-//             </div>
-//             <audio className="hidden"
-//               ref={musicref}
-//               src={`http://localhost:5999/${song?.file.replace(/\\/g, "/")}`}
-//               onTimeUpdate={settingCurrentTime}
-//               onLoadedMetadata={settingDuration}
-//             />
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
+                <p className="text-zinc-300 text-sm sm:text-base md:text-lg mt-3 tracking-wide">
+                  {song?.artist || "Unknown Artist"}
+                </p>
+              </div>
 
-// export default MusicPlayer;
+              <div className="flex items-center justify-center gap-4 sm:gap-6 mb-6 pt-2">
+                <button className="w-7 h-7 sm:w-12 sm:h-12 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white flex items-center justify-center transition duration-300">
+                  <IoPlaySkipBackOutline className="w-5 h-5" />
+                </button>
+
+                <button
+                  onClick={musicplaypause}
+                  className="bg-green-500 text-black p-4 sm:p-5 rounded-full hover:scale-110 active:scale-95 transition duration-300 shadow-lg shadow-green-500/30"
+                >
+                  {isplay ? (
+                    <FaRegCirclePause className="w-5 h-5 sm:w-8 sm:h-8" />
+                  ) : (
+                    <FaRegCirclePlay className="w-5 h-5 sm:w-8 sm:h-8" />
+                  )}
+                </button>
+
+                <button className="w-7 h-7  sm:w-12 sm:h-12 rounded-full bg-zinc-800 hover:bg-zinc-700 text-white flex items-center justify-center transition duration-300">
+                  <IoPlaySkipForwardOutline className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="flex items-center gap-2 sm:gap-3 w-full">
+                <span className="text-[10px] sm:text-xs text-gray-300 w-10 text-right">
+                  {formatTime(currentTime)}
+                </span>
+
+                <input
+                  type="range"
+                  min="0"
+                  max={duration || 0}
+                  value={currentTime}
+                  onChange={(e) => {
+                    musicref.current.currentTime = e.target.value;
+                    setCurrettime(e.target.value);
+                  }}
+                  className="w-full h-1 rounded-lg appearance-none cursor-pointer accent-green-500 bg-zinc-700"
+                />
+
+                <span className="text-[10px] sm:text-xs text-gray-300 w-10">
+                  {formatTime(duration)}
+                </span>
+              </div>
+
+              {/* AUDIO */}
+              <audio
+                className="hidden"
+                ref={musicref}
+                src={`${import.meta.env.VITE_API_URL}/${song?.file?.replace(
+                  /\\/g,
+                  "/",
+                )}`}
+                onTimeUpdate={settingCurrentTime}
+                onLoadedMetadata={settingDuration}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default MusicPlayer;

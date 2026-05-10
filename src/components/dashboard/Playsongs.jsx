@@ -7,7 +7,7 @@ import { FaRegCirclePlay, FaRegCirclePause } from "react-icons/fa6";
 import { FiVolume2 } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
 import { useplayer } from "../context/Playerprovider";
-
+import { FaChevronRight } from "react-icons/fa6";
 const Playsongs = () => {
   const {
     currentSong,
@@ -72,8 +72,7 @@ const Playsongs = () => {
   const backwardsong = () => {
     if (!songlist.length) return;
 
-    const previndex =
-      (currentindex - 1 + songlist.length) % songlist.length;
+    const previndex = (currentindex - 1 + songlist.length) % songlist.length;
 
     setCurrentindex(previndex);
     setCurrentSong(songlist[previndex]);
@@ -105,7 +104,7 @@ const Playsongs = () => {
 
   return (
     <div className="fixed bottom-0 left-0 right-0 bg-black/90 backdrop-blur-xl border-t border-white/10 px-6 py-3 z-50">
-      <div className="grid grid-cols-3 items-center w-full gap-4">
+      <div className="flex justify-between items-center w-full gap-4">
         {/* LEFT */}
         <div
           className="flex items-center gap-4 min-w-0 cursor-pointer"
@@ -135,15 +134,15 @@ const Playsongs = () => {
         </div>
 
         {/* CENTER */}
-        <div className="flex flex-col items-center w-full">
+        <div className="">
           {/* CONTROLS */}
-          <div className="flex items-center gap-6 mb-2">
-            <button
+          <div className="flex items-center justify-center gap-6 mb-2">
+            {/* <button
               className="text-gray-400 hover:text-white transition"
               onClick={backwardsong}
             >
               <IoPlaySkipBackOutline size={24} />
-            </button>
+            </button> */}
 
             <button
               onClick={(e) => {
@@ -159,16 +158,21 @@ const Playsongs = () => {
               )}
             </button>
 
-            <button
+            <div>
+              <FaChevronRight size={30}  className="text-white"
+               onClick={() => navigation("/musicplayer", {  state: { currentSong },})}/>
+            </div>
+
+            {/* <button
               className="text-gray-400 hover:text-white transition"
               onClick={forwardsong}
             >
               <IoPlaySkipForwardOutline size={24} />
-            </button>
+            </button> */}
           </div>
 
           {/* PROGRESS BAR */}
-          <div className="flex items-center gap-3 w-full max-w-xl">
+          {/* <div className="flex items-center gap-3 w-full max-w-xl">
             <span className="text-xs text-gray-400 w-10 text-right">
               {formatTime(currentTime)}
             </span>
@@ -193,11 +197,11 @@ const Playsongs = () => {
             <span className="text-xs text-gray-400 w-10">
               {formatTime(duration)}
             </span>
-          </div>
+          </div> */}
         </div>
 
         {/* RIGHT */}
-        <div className="flex items-center gap-3 justify-end">
+        {/* <div className="flex items-center gap-3 justify-end">
           <FiVolume2 className="text-white text-xl" />
 
           <input
@@ -213,7 +217,7 @@ const Playsongs = () => {
             }}
             className="w-24 accent-white"
           />
-        </div>
+        </div> */}
       </div>
 
       {/* AUDIO */}
@@ -221,7 +225,7 @@ const Playsongs = () => {
         ref={musicref}
         src={`${import.meta.env.VITE_API_URL}/${currentSong?.file.replace(
           /\\/g,
-          "/"
+          "/",
         )}`}
         onTimeUpdate={settingCurrentTime}
         onLoadedMetadata={settingDuration}

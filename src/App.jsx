@@ -20,6 +20,7 @@ import PlaylistTou from "./components/subpages/Playlistforu/playlisttou/Playlist
 import TopTracks from "./components/subpages/Playlistforu/TopTracks/TopTracks";
 import TrendingSongs from "./components/subpages/Playlistforu/TrendingSongs/TrendingSongs";
 import Artistpage from "./components/subpages/artistpage/Artistpage";
+import MusicPlayer from "./components/subpages/musicplayer/MusicPlayer";
 
 function App() {
   const [islogin, setIslogin] = useState(!!localStorage.getItem("token"));
@@ -67,7 +68,7 @@ function App() {
               
             </Route>
             ////
-            {/* <Route path="/musicplayer" element={<MusicPlayer/>}/> */}
+            <Route path="/musicplayer" element={<MusicPlayer/>}/>
             <Route path="/playsong" element={<Playsongs />} />
 
             <Route path="/artistpage" element={<Artistpage/>}/>
