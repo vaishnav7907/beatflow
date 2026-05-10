@@ -1,64 +1,81 @@
-import React, { Component, useState } from "react";
-import { IoSettingsOutline } from "react-icons/io5";
-import { GoHome } from "react-icons/go";
-import { BiCategory } from "react-icons/bi";
-import { TbFileMusic, TbPlaylist } from "react-icons/tb";
-import { MdFavoriteBorder } from "react-icons/md";
-import { MdOutlineWatchLater } from "react-icons/md";
-import Homepage from "./Homepage";
+import React from "react";
 import { FiMusic } from "react-icons/fi";
-import Playsongs from "./Playsongs";
-import Categories from "../pages/categories/Categories";
-import Playlist from "../pages/playlist/Playlist";
-import Favorites from "../pages/favorites/Favorites";
-import Recents from "../pages/recents/Recents";
-import { IoSearch } from "react-icons/io5";
-
-import { Link, Links, NavLink, Outlet, Route, Routes, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import Sidebar from "../pages/sidebar/Sidebar";
 
 const MainDashboard = () => {
-
-
-const navigate = useNavigate()
-// const [currentSong, setCurrentSong] = useState(null);
-// const [songlist , setSonglist]= useState([])
-// const [currentindex,setCurrentindex]= useState(0)
-  
-
-
   return (
-    <div className=" bg-black min-h-screen w-screen   flex flex-col ">
-      <div className="flex ">
-        {/* sidebar search */}
+    <div className="bg-black min-h-screen w-full overflow-hidden">
+      
+      {/* Layout */}
 
-        <div className="px-3 py-9 w-20  md:w-60 lg:w-60 flex flex-col gap-7 h-screen border-2 border-r-slate-800   ">
-          <div className="flex px-1">
-            <div className="bg-white p-2 rounded-xl flex justify-center items-center ">
-              <FiMusic color="black" size={23} />
+      <div className="flex h-screen">
+        
+        {/* Sidebar */}
+
+        <div
+          className="
+            w-20 sm:w-24 md:w-50
+            bg-black
+            border-r border-zinc-800
+            flex flex-col
+            px-2 sm:px-3 md:px-5
+            py-5
+            gap-8
+            transition-all duration-300
+          "
+        >
+          {/* Logo */}
+
+          <div className="flex items-center justify-center md:justify-start gap-3">
+            
+            <div
+              className="
+                bg-white
+                p-2.5
+                rounded-2xl
+                flex items-center justify-center
+                shadow-lg
+              "
+            >
+              <FiMusic color="black" size={22} />
             </div>
 
-            <div className="pl-3">
-              <h1 className="text-white text-2xl invisible sm:invisible md:visible">BeatFlow</h1>
-            </div>
+            <h1
+              className="
+                hidden md:block
+                text-white
+                text-2xl
+                font-bold
+                tracking-wide
+              "
+            >
+              BeatFlow
+            </h1>
           </div>
 
-          <div>
-            <Sidebar/>
+          {/* Sidebar Menu */}
+
+          <div className="flex-1 overflow-y-auto">
+            <Sidebar />
           </div>
         </div>
 
-        {/* main content */}
+        {/* Main Content */}
 
-        <div className="h-screen  grow  p-8 overflow-y-auto scroll-smooth pb-20 ">
+        <div
+          className="
+            flex-1
+            overflow-y-auto
+            px-4 sm:px-6 md:px-8
+            py-5 sm:py-7
+            pb-24
+            scroll-smooth
+          "
+        >
           <Outlet />
-          {/* context={{ setCurrentSong , setCurrentindex, setSonglist }} */}
         </div>
       </div>
-
-      {/* music player */}
-      
-      
     </div>
   );
 };

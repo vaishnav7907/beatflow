@@ -191,68 +191,72 @@ const Homepage = () => {
           Songs for you
         </h1>
 
-       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 pt-5">
-  {getasong.map((songdisplay, index) => (
-    <div
-      key={songdisplay._id}
-      className="group relative flex items-center gap-3 bg-zinc-900 hover:bg-zinc-800 p-3 rounded-2xl transition-all duration-300 cursor-pointer overflow-hidden"
-      onClick={() => {
-        setCurrentSong(songdisplay);
-        setSonglist(getasong);
-        setCurrentindex(index);
-        setplaysongss(true);
-      }}
-    >
-      {/* Image */}
-      <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 flex-shrink-0 overflow-hidden rounded-xl">
-        <img
-          src={`${import.meta.env.VITE_API_URL}/${songdisplay.songimage}`}
-          className="w-full h-full object-cover rounded-xl group-hover:scale-105 transition duration-300"
-          alt="song"
-        />
-      </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-5 pt-5 bg-black">
+          {getasong.map((songdisplay, index) => (
+            <div
+              key={songdisplay._id}
+              className="  group  bg-zinc-900  hover:bg-zinc-800  border border-zinc-800  rounded-3xl  overflow-hidden  transition-all duration-300  cursor-pointer  hover:-translate-y-1  hover:shadow-2xl"
+              onClick={() => {
+                setCurrentSong(songdisplay);
+                setSonglist(getasong);
+                setCurrentindex(index);
+                setplaysongss(true);
+              }}
+            >
+              <div className="relative overflow-hidden">
+                <img
+                  src={`${import.meta.env.VITE_API_URL}/${songdisplay.songimage}`}
+                  className="  w-full  h-40 sm:h-44 md:h-52  object-cover  group-hover:scale-105  transition duration-500"
+                  alt="song"
+                />
 
-      {/* Content */}
-      <div className="flex flex-col justify-between flex-1 min-w-0 h-full">
-        
-        {/* Heart */}
-        <div className="flex justify-end">
-          <FaHeart
-            className="text-red-400 text-sm sm:text-base cursor-pointer hover:scale-110 transition duration-200"
-            onClick={(e) => {
-              e.stopPropagation();
-              addalltofav(songdisplay._id);
-            }}
-          />
+                <div
+                  className="  absolute inset-0  bg-gradient-to-t  from-black/70  via-black/10  to-transparent"
+                ></div>
+
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    addalltofav(songdisplay._id);
+                  }}
+                  className="  absolute top-3 right-3  w-9 h-9  rounded-full  bg-black/50  backdrop-blur-md  flex items-center justify-center  hover:bg-red-500/20  transition duration-300 "
+                >
+                  <FaHeart className="text-red-400 text-sm" />
+                </button>
+              </div>
+
+              <div className="p-4 flex items-center justify-between gap-3">
+                <div className="min-w-0">
+                  <h5
+                    className="  text-white  text-sm sm:text-base  font-semibold  truncate"
+                  >
+                    {songdisplay.songname}
+                  </h5>
+
+                  <p
+                    className="  text-zinc-400  text-xs sm:text-sm  truncate  mt-1 "
+                  >
+                    {songdisplay.artist}
+                  </p>
+                </div>
+
+                {/* Playlist Button */}
+
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigatee("/dashboard/playlist", {
+                      state: { songId: songdisplay._id },
+                    });
+                  }}
+                  className="  flex-shrink-0  w-11 h-11  rounded-full  bg-green-500  hover:scale-110  flex items-center justify-center  transition duration-300  shadow-lg "
+                >
+                  <CgPlayListAdd className="text-black text-xl" />
+                </button>
+              </div>
+            </div>
+          ))}
         </div>
-
-        {/* Song Details */}
-        <div className="py-1">
-          <h5 className="text-white text-sm sm:text-base font-semibold truncate">
-            {songdisplay.songname}
-          </h5>
-
-          <p className="text-green-300 text-xs sm:text-sm truncate">
-            {songdisplay.artist}
-          </p>
-        </div>
-
-        {/* Playlist */}
-        <div className="flex justify-end">
-          <CgPlayListAdd
-            className="text-green-400 text-xl sm:text-2xl cursor-pointer hover:scale-110 transition duration-200"
-            onClick={(e) => {
-              e.stopPropagation();
-              navigatee("/dashboard/playlist", {
-                state: { songId: songdisplay._id },
-              });
-            }}
-          />
-        </div>
-      </div>
-    </div>
-  ))}
-</div>
         {playsongss && (
           <div className="   ">
             <Playsongs />

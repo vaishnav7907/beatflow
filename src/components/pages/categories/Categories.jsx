@@ -6,17 +6,23 @@ import { CgPlayListAdd } from "react-icons/cg";
 import { FaHeart } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import Playsongs from "../../dashboard/Playsongs";
+
 const Categories = () => {
   const [query, setQuery] = useState("");
   const [songs, setSongs] = useState([]);
   const [searched, setSearched] = useState(false);
-const [playmusic,setPlaymusic]=useState(false)
+  const [playmusic, setPlaymusic] = useState(false);
+
   const navigate = useNavigate();
 
-  // 🔍 API CALL
+  const { setCurrentSong, setSonglist, setCurrentindex } = useplayer();
+
+  // 🔍 SEARCH API
+
   const handleSearch = async (searchText) => {
     try {
       const q = searchText.trim();
+
       if (!q) {
         setSongs([]);
         setSearched(false);
@@ -24,7 +30,7 @@ const [playmusic,setPlaymusic]=useState(false)
       }
 
       const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/Beatflow/searchsongs?query=${q}`,
+        `${import.meta.env.VITE_API_URL}/Beatflow/searchsongs?query=${q}`
       );
 
       setSongs(res.data);
@@ -34,7 +40,8 @@ const [playmusic,setPlaymusic]=useState(false)
     }
   };
 
-  // ⚡ LIVE SEARCH (Debounce)
+  // ⚡ LIVE SEARCH
+
   useEffect(() => {
     const delay = setTimeout(() => {
       handleSearch(query);
@@ -43,9 +50,7 @@ const [playmusic,setPlaymusic]=useState(false)
     return () => clearTimeout(delay);
   }, [query]);
 
-  const { setCurrentSong, setSonglist, setCurrentindex } = useplayer();
-
-  // add to fav
+  // ❤️ ADD TO FAVORITES
 
   const addalltofav = async (songId) => {
     try {
@@ -58,7 +63,7 @@ const [playmusic,setPlaymusic]=useState(false)
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        },
+        }
       );
 
       alert("✅ Song added to favourites");
@@ -67,140 +72,127 @@ const [playmusic,setPlaymusic]=useState(false)
     }
   };
 
-  //add to playlist
-
-  const addSongToPlaylist = async (playlistId) => {
-    if (!songId) {
-      // navigation("/urplaylist");
-      return;
-    }
-
-    try {
-      await axios.post(
-        `${import.meta.env.VITE_API_URL}/Beatflow/addsongplaylist`,
-        {
-          playlistId,
-          songId,
-        },
-      );
-
-      alert("✅ Song added!");
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   return (
-    <div>
-      <div className="flex flex-col gap-7">
-        {/* Heading */}
-        <div>
-          <h1 className="text-4xl text-white mb-2">Discover Music</h1>
-          <p className="text-gray-400">Find your next favorite track</p>
-        </div>
+    <div className="w-full flex flex-col gap-7 pb-24">
+      
+      {/* Heading */}
 
-        {/* 🔍 Search Bar */}
-        <div className="flex justify-start items-center relative">
-          <input
-            type="text"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") handleSearch(query);
-            }}
-            className="w-full bg-gray-900 border-gray-800 rounded-xl px-5 py-4 text-white"
-            placeholder="Search for songs or artists..."
-          />
+      <div className="flex flex-col gap-2">
+        <h1 className="text-2xl md:text-4xl lg:text-4xl text-white">
+          Discover Music
+        </h1>
 
-          <IoSearch
-            onClick={() => handleSearch(query)}
-            className="text-gray-400 absolute right-3 cursor-pointer"
-            size={21}
-          />
-        </div>
-
-        {/* 🎵 Results */}
-        <div>
-          {searched &&
-            (songs.length > 0 ? (
-              songs.map((song, index) => (
-                <div
-                  key={song._id}
-                  className="text-white mt-3 h-20 w-full pl-2 pr-5 bg-gray-900 rounded-lg hover:bg-gray-950  flex justify-between items-center"
-                  onClick={() => {
-                    setCurrentSong(songs[index]);
-                    setSonglist(songs);
-                    setCurrentindex(index);
-                    setPlaymusic(true);
-                  }}
-                >
-                  <div className="flex gap-5">
-                    <div className="w-16 h-16">
-                      <img
-                        src={`${import.meta.env.VITE_API_URL}/${song.songimage}`}
-                        alt=""
-                        className="rounded-lg h-full w-full object-cover"
-                      />
-                    </div>
-
-                    <div>
-                      <h3 className="text-lg font-semibold  ">
-                        {song.songname || song.title}
-                      </h3>
-                      <p className="text-gray-400">
-                        {song.artist || "Unknown Artist"}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-5">
-                    <FaHeart
-                      className="text-red-400 cursor-pointer"
-                      onClick={(e) => {
-                        (e.stopPropagation(), addalltofav(song._id));
-                      }}
-                    />
-
-                    <CgPlayListAdd
-                      className="text-green-400 text-2xl cursor-pointer"
-                      onClick={(e) => {
-                        navigate("/dashboard/playlist", {
-                          state: { songId: song._id },
-                        });
-                      }}
-                    />
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div>
-                <p className="text-gray-500 mt-3">No songs found</p>
-              </div>
-            ))}
-        </div>
-
-            {playmusic && (
-              <div>
-                  <Playsongs />
-                </div>
-            )}
-
-        {/* 🎼 Categories */}
-        {/* <div className="flex gap-3">
-          <button className="bg-gray-900 px-6 py-2 rounded-full hover:bg-gray-500">
-            All
-          </button>
-          <button className="bg-gray-900 px-6 py-2 rounded-full hover:bg-gray-500">
-            Tamil
-          </button>
-          <button className="bg-gray-900 px-6 py-2 rounded-full hover:bg-gray-500">
-            Malayalam
-          </button>
-          <button className="bg-gray-900 px-6 py-2 rounded-full hover:bg-gray-500">
-            Hindi
-          </button>
-        </div> */}
+        <p className="text-sm sm:text-base md:text-lg text-zinc-400">
+          Find your next favorite track
+        </p>
       </div>
+
+      {/* Search Bar */}
+
+      <div className="relative w-full">
+        <input
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") handleSearch(query);
+          }}
+          placeholder="Search for songs or artists..."
+          className="  w-full  bg-zinc-900    border border-zinc-800  focus:border-green-500  outline-none  rounded-2xl  pl-5 pr-12  py-3 sm:py-4  text-white  placeholder:text-transparent  sm:placeholder:text-zinc-500  transition duration-300  "
+        />
+
+        <IoSearch
+          onClick={() => handleSearch(query)}
+          className="  text-zinc-400  absolute  right-4  top-1/2  -translate-y-1/2  cursor-pointer  hover:text-white  transition duration-300  "
+          size={21}
+        />
+      </div>
+
+      {/* Results */}
+
+      <div className="flex flex-col gap-3">
+        {searched &&
+          (songs.length > 0 ? (
+            songs.map((song, index) => (
+              <div
+                key={song._id}
+                className="  group   bg-zinc-900  hover:bg-zinc-800  border border-zinc-800  rounded-2xl  p-3  transition-all duration-300  cursor-pointer  flex items-center  gap-3  "
+                onClick={() => {
+                  setCurrentSong(songs[index]);
+                  setSonglist(songs);
+                  setCurrentindex(index);
+                  setPlaymusic(true);
+                }}
+              >
+                {/* Song Image */}
+
+                <div className="w-10 h-10 sm:w-16 sm:h-16 flex-shrink-0">
+                  <img
+                    src={`${import.meta.env.VITE_API_URL}/${song.songimage}`}
+                    alt=""
+                    className="  rounded-md  h-full  w-full  object-cover  group-hover:scale-105  transition duration-300
+                      
+                    "
+                  />
+                </div>
+
+                {/* Song Details */}
+
+                <div className="flex-1 min-w-0">
+                  <h3
+                    className="  text-white  text-sm sm:text-base  font-semibold  truncate  ">
+                    {song.songname || song.title}
+                  </h3>
+
+                  <p
+                    className="  text-zinc-400  text-xs sm:text-sm  truncate  mt-1 ">
+                    {song.artist || "Unknown Artist"}
+                  </p>
+                </div>
+
+                {/* Action Buttons */}
+
+                <div className="flex items-center gap-2 sm:gap-3 flex-shrink-0">
+                  
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      addalltofav(song._id);
+                    }}
+                    className="  w-4 h-4 sm:w-9 sm:h-9  rounded-full  bg-zinc-800  hover:bg-red-500/20  flex items-center justify-center  transition duration-300  ">
+                    <FaHeart className="text-red-400 text-xs sm:text-sm" />
+                  </button>
+
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+
+                      navigate("/dashboard/playlist", {
+                        state: { songId: song._id },
+                      });
+                    }}
+                    className=" w-4 h-4 sm:w-9 sm:h-9 rounded-full bg-green-500 hover:scale-110 flex items-center justify-center transition duration-300 ">
+                    <CgPlayListAdd className="text-black text-lg sm:text-xl" />
+                  </button>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="flex justify-center pt-10">
+              <p className="text-zinc-500 text-sm sm:text-base">
+                No songs found
+              </p>
+            </div>
+          ))}
+      </div>
+
+      {/* Music Player */}
+
+      {playmusic && (
+        <div>
+          <Playsongs />
+        </div>
+      )}
     </div>
   );
 };

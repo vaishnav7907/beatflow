@@ -78,18 +78,18 @@ const Playlist = () => {
     <div>
       <div className="flex justify-between">
         <div>
-          <h1 className="text-4xl text-white mb-2">Your Playlists</h1>
-          <p className="text-gray-400">
+          <h1 className="text-2xl md:text-4xl lg:text-4xl text-white mb-2">Your Playlists</h1>
+          <p className="text-gray-400 text-sm sm:text-base md:text-lg">
             Curated collections of your favorite music
           </p>
         </div>
 
         <button
-          className="flex items-center justify-center gap-2 h-10 w-40 bg-white text-black rounded-full"
+          className="flex items-center justify-center gap-2 h-5 w-5  sm:h-10  sm:w-40  hover:scale-105 transition duration-300 shadow-md hover:shadow-gray-500 bg-white text-black rounded-full"
           onClick={playlistcreatefn}
         >
           <GoPlus />
-          Create Playlist
+          <p className="hidden sm:block md:block lg:block"> Create Playlist </p>
         </button>
       </div>
 

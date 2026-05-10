@@ -96,29 +96,25 @@ const navigato=useNavigate()
   },
 ];
   return (
-    <div >
-      <ul>
-            {sidebar.map((data, index) => {
-              return (
-                <Link
-                  to={data.path}
-                  key={index}className="px-4 py-3 flex gap-1.5 hover:bg-slate-800 w-55   rounded-md   cursor-pointer     " >
+    <div className="">
+  <ul>
+    {sidebar.map((data, index) => {
+      return (
+        <Link
+          to={data.path}
+          key={index}
+          className="  flex justify-center sm:justify-start items-center py-3 px-6 gap-4 sm:hover:bg-slate-800 md:hover:bg-slate-800 lg:hover:bg-slate-800 w-full rounded-md cursor-pointer  transition-all duration-300 "
+        >
+          <div>{data.icons}</div>
 
-                    
-                  <div>{data.icons}</div>
-                  
-                  <p className="text-slate-400 hover:text-white  invisible sm:invisible md:visible">
-                    {data.name}  
-                  </p>
-
-                </Link>
-              );
-            })}
-          </ul>
-
-
-         
-    </div>
+          <p className="text-slate-400 hidden md:block">
+            {data.name}
+          </p>
+        </Link>
+      );
+    })}
+  </ul>
+</div>
   )
 }
 
